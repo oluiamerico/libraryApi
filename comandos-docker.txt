@@ -1,0 +1,11 @@
+# Check port
+netstat -aof | findstr 5432
+
+# Create network
+docker create network libray-network
+
+# Run postgresql container 16.3v
+docker run --name libraydb -p 5432:5432 -e POSTGRES_PASSWORD=postgres -e POSTGRES_USER=postgres -e POSTGRES_DB=libray -d --network libray-network postgres:16.3
+
+# Run PgAdmin 4
+docker run --name pgadmin4 -p 15432:80 -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin -d --network libray-network dpage/pgadmin4
