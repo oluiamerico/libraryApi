@@ -6,6 +6,8 @@ import com.luiamerico.librayapi.repository.AutorRepository;
 import com.luiamerico.librayapi.repository.LivroRepository;
 import com.luiamerico.librayapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -45,6 +47,7 @@ public class AutorService {
     }
 
     public List<Autor> pesquisarAutores(String nome, String nacionalidade) {
+
         if(nome != null && nacionalidade != null) {
             return autorRepository.findByNomeAndNacionalidade(nome, nacionalidade);
         }
@@ -58,6 +61,22 @@ public class AutorService {
         }
 
         return autorRepository.findAll();
+
+    }
+
+    public List<Autor> pesquisaByExample(String nome, String nacionalidade) {
+        var autor = new Autor();
+        autor.setNome(nome);
+        autor.setNacionalidade(nacionalidade);
+
+        ExampleMatcher matcher = ExampleMatcher
+                .matching()
+                .withIgnorePaths("dataNascimento", "id", "dataCadastro")
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Autor> autorExample = Example.of(autor, matcher);
+        return autorRepository.findAll(autorExample);
     }
 
     public boolean possuiLivro(Autor autor) {
