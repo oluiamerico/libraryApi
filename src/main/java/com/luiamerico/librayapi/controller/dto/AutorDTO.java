@@ -1,6 +1,5 @@
 package com.luiamerico.librayapi.controller.dto;
 
-import com.luiamerico.librayapi.model.Autor;
 import jakarta.validation.constraints.*;
 
 import java.time.LocalDate;
@@ -18,11 +17,5 @@ public record AutorDTO(
         @Size(min = 2, max = 50, message = "Campo fora do tamanho permitido, deve ter entre 2 e 50 caracteres")
         String nacionalidade) {
 
-    public Autor mapearAutor() {
-        Autor autor = new Autor();
-        autor.setNome(this.nome);
-        autor.setDataNascimento(this.dataNascimento);
-        autor.setNacionalidade(this.nacionalidade);
-        return autor;
-    }
+
 }
