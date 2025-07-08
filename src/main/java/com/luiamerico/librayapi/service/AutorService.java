@@ -2,8 +2,10 @@ package com.luiamerico.librayapi.service;
 
 import com.luiamerico.librayapi.exceptions.OperacaoNaoPermitidaException;
 import com.luiamerico.librayapi.model.Autor;
+import com.luiamerico.librayapi.model.Usuario;
 import com.luiamerico.librayapi.repository.AutorRepository;
 import com.luiamerico.librayapi.repository.LivroRepository;
+import com.luiamerico.librayapi.security.SecurityService;
 import com.luiamerico.librayapi.validator.AutorValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
@@ -21,10 +23,13 @@ public class AutorService {
     private final AutorRepository autorRepository;
     private final AutorValidator autorValidator;
     private final LivroRepository livroRepository;
+    private final SecurityService securityService;
 
 
     public Autor salvarAutor(Autor autor) {
         autorValidator.validar(autor);
+        Usuario usuario = securityService.obterPorUsuarioLogado();
+        autor.setUsuario(usuario);
         return autorRepository.save(autor);
     }
 

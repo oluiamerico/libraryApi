@@ -2,10 +2,16 @@ package com.luiamerico.librayapi.controller;
 import com.luiamerico.librayapi.controller.dto.AutorDTO;
 import com.luiamerico.librayapi.controller.mappers.AutorMapper;
 import com.luiamerico.librayapi.model.Autor;
+import com.luiamerico.librayapi.model.Usuario;
+import com.luiamerico.librayapi.security.SecurityService;
 import com.luiamerico.librayapi.service.AutorService;
+import com.luiamerico.librayapi.service.UsuarioService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,6 +30,7 @@ public class AutorController implements GenericController {
     private final AutorMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> cadastrarAutor(@RequestBody @Valid AutorDTO autorDTO) {
         Autor autor = mapper.toEntity(autorDTO);
         autorService.salvarAutor(autor);
@@ -32,6 +39,7 @@ public class AutorController implements GenericController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<Void> atualizarAutor(
             @PathVariable("id") String id,
             @RequestBody @Valid AutorDTO autorDTO) {
@@ -66,6 +74,7 @@ public class AutorController implements GenericController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<AutorDTO> obterDetalhes(@PathVariable("id") String id) {
         var idAutor = UUID.fromString(id);
         Optional<Autor> autorOptional = autorService.obterPorId(idAutor);
@@ -79,6 +88,7 @@ public class AutorController implements GenericController {
     }
 
     @GetMapping
+    @PreAuthorize("hasRole('GERENTE')")
     public ResponseEntity<List<AutorDTO>> pesquisarAutores(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "nacionalidade", required = false) String nacionalidade) {

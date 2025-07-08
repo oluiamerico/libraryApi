@@ -2,7 +2,9 @@ package com.luiamerico.librayapi.service;
 
 import com.luiamerico.librayapi.model.GeneroLivro;
 import com.luiamerico.librayapi.model.Livro;
+import com.luiamerico.librayapi.model.Usuario;
 import com.luiamerico.librayapi.repository.LivroRepository;
+import com.luiamerico.librayapi.security.SecurityService;
 import com.luiamerico.librayapi.validator.LivroValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,9 +25,12 @@ public class LivroService {
 
     private final LivroRepository livroRepository;
     private final LivroValidator validator;
+    private final SecurityService securityService;
 
     public Livro salvar(Livro livro) {
         validator.validar(livro);
+        Usuario usuario = securityService.obterPorUsuarioLogado();
+        livro.setUsuario(usuario);
         return livroRepository.save(livro);
     }
 

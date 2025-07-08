@@ -44,9 +44,9 @@ public class Autor {
     @Column(name = "data_atualizacao")
     private LocalDateTime dataAtualizacao;
 
-
-    @Column(name = "id_usuario")
-    private UUID idUsuario;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 
     public UUID getId() {
         return id;
@@ -86,5 +86,29 @@ public class Autor {
 
     public void setLivros(List<Livro> livros) {
         this.livros = livros;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 }
